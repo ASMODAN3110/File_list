@@ -29,8 +29,10 @@ public class PdfGenerator {
      * Génère un PDF avec la liste des fichiers
      */
     public void genererPdf(List<FileInfo> fichiers, Path repertoire, Path fichierSortie) throws IOException {
-        // Trier les fichiers par nom
-        fichiers.sort(Comparator.comparing(FileInfo::getNom));
+        // Trier : dossiers en premier, puis fichiers, tous triés par nom
+        fichiers.sort(Comparator
+            .comparing((FileInfo f) -> !f.estDossier()) // Dossiers en premier (false avant true)
+            .thenComparing(FileInfo::getNom));
 
         try (PDDocument document = new PDDocument()) {
             PDPage page = new PDPage(PDRectangle.A4);
@@ -167,6 +169,9 @@ public class PdfGenerator {
             
             // Nom (tronqué si nécessaire)
             String nom = fichier.getNom();
+            if (fichier.estDossier()) {
+                nom = "[D] " + nom; // Préfixe pour les dossiers
+            }
             if (nom.length() > 40) {
                 nom = nom.substring(0, 37) + "...";
             }

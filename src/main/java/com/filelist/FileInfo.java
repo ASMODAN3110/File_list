@@ -13,16 +13,18 @@ public class FileInfo {
     private String categorie;
     private long tailleOctets;
     private String tailleLisible;
+    private boolean estDossier;
 
     public FileInfo(Path cheminComplet, String nom, String extension, String typeMime, 
-                   String categorie, long tailleOctets) {
+                   String categorie, long tailleOctets, boolean estDossier) {
         this.cheminComplet = cheminComplet;
         this.nom = nom;
         this.extension = extension;
         this.typeMime = typeMime != null ? typeMime : "inconnu";
         this.categorie = categorie;
         this.tailleOctets = tailleOctets;
-        this.tailleLisible = formaterTaille(tailleOctets);
+        this.tailleLisible = estDossier ? formaterTaille(tailleOctets) : formaterTaille(tailleOctets);
+        this.estDossier = estDossier;
     }
 
     /**
@@ -67,6 +69,10 @@ public class FileInfo {
 
     public String getTailleLisible() {
         return tailleLisible;
+    }
+
+    public boolean estDossier() {
+        return estDossier;
     }
 
     @Override

@@ -43,6 +43,22 @@ public class FileListGenerator {
             }
         }
 
+        // Saisie du niveau de profondeur de scan
+        int profondeurMax = 0;
+        while (profondeurMax < 1) {
+            System.out.print("Veuillez entrer le niveau de profondeur de scan (1 = racine seulement, 2 = racine + 1 niveau, etc.) : ");
+            String profondeurStr = scanner.nextLine().trim();
+            
+            try {
+                profondeurMax = Integer.parseInt(profondeurStr);
+                if (profondeurMax < 1) {
+                    System.out.println("Erreur : Le niveau de profondeur doit être au moins 1.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Erreur : Veuillez entrer un nombre valide.");
+            }
+        }
+
         // Saisie du nom du fichier de sortie
         System.out.print("Veuillez entrer le nom du fichier PDF de sortie (sans extension) : ");
         String nomFichier = scanner.nextLine().trim();
@@ -63,7 +79,7 @@ public class FileListGenerator {
             
             // Scanner le répertoire
             FileScanner fileScanner = new FileScanner();
-            List<FileInfo> fichiers = fileScanner.scannerRepertoire(repertoire);
+            List<FileInfo> fichiers = fileScanner.scannerRepertoire(repertoire, profondeurMax);
             
             if (fichiers.isEmpty()) {
                 System.out.println("Aucun fichier trouvé dans le répertoire spécifié.");
